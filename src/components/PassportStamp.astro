@@ -1,0 +1,81 @@
+---
+interface Props {
+  location: string;
+  date: string;
+  type?: 'entry' | 'departure' | 'special';
+  color?: 'red' | 'blue' | 'purple' | 'green';
+  rotation?: number;
+}
+
+const {
+  location,
+  date,
+  type = 'entry',
+  color = 'red',
+  rotation = 0
+} = Astro.props;
+
+// Color classes based on stamp type
+const colorClasses = {
+  red: 'border-red-600 text-red-700',
+  blue: 'border-blue-600 text-blue-700',
+  purple: 'border-purple-600 text-purple-700',
+  green: 'border-green-600 text-green-700'
+};
+
+// Format date for display
+const [year, month, day] = date.split('-');
+const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+const monthName = months[parseInt(month) - 1];
+
+// City-specific SVG icons
+const cityIcons: Record<string, string> = {
+  // Cities
+  'Los Angeles': '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>',
+  'San Diego': '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v12m0 0c-1.5-1-3-1.5-4.5-1.5S4 14.5 3 15.5m9-.5c1.5-1 3-1.5 4.5-1.5s3.5.5 4.5 1.5M7 9c-.5-1.5-.5-3 0-4.5M12 7c0-1.5.5-3 1.5-4.5M17 9c.5-1.5.5-3 0-4.5"/>',
+  'Portland': '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>',
+  'Forks': '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>',
+  'Vancouver': '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>',
+  'Seattle': '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/>',
+  'Bay Area': '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+  'Lake Tahoe': '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/>',
+  'Salt Lake City': '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>',
+};
+
+const cityIcon = cityIcons[location] || '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>';
+---
+
+<div
+  class="stamp-container relative w-32 h-32 opacity-70 hover:opacity-100 transition-opacity duration-300"
+  style={`transform: rotate(${rotation}deg);`}
+>
+  <div class={`stamp-outer absolute inset-0 rounded-full border-4 border-dashed ${colorClasses[color]} flex items-center justify-center`}>
+    <div class={`stamp-inner rounded-full border-2 ${colorClasses[color]} w-[90%] h-[90%] flex flex-col items-center justify-center font-bold uppercase`}>
+      <div class="text-xs">{monthName} {day}</div>
+      <svg class="w-8 h-8 my-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" set:html={cityIcon}></svg>
+      <div class="text-[10px] leading-tight text-center px-2">{location}</div>
+      <div class="text-xs">{year}</div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .stamp-container {
+    filter: contrast(1.2);
+  }
+
+  .stamp-outer {
+    animation: stamp-appear 0.5s ease-out;
+  }
+
+  @keyframes stamp-appear {
+    from {
+      transform: scale(0) rotate(180deg);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1) rotate(0deg);
+      opacity: 1;
+    }
+  }
+</style>

@@ -1,0 +1,220 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Footer from '../components/Footer.astro';
+import PassportStamp from '../components/PassportStamp.astro';
+---
+
+<BaseLayout
+  title="Kirk's Travel Passport"
+  description="Explore Kirk the English Bulldog's travel adventures across the West Coast"
+>
+  <main class="w-full px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Passport Cover -->
+    <section id="passport-cover" class="passport-cover min-h-screen flex items-center justify-center mb-16">
+      <div class="text-center">
+        <div class="mb-8">
+          <div class="text-8xl mb-4">🐾</div>
+        </div>
+        <h1 class="text-5xl sm:text-6xl font-bold text-gray-900 mb-4">Kirk's Passport</h1>
+        <p class="text-xl text-gray-600 mb-8">Adventures of an English Bulldog</p>
+        <div class="text-sm text-gray-500 space-y-1">
+          <p>Passport No: KB-2025-001</p>
+          <p>Issued: December 9, 2025</p>
+        </div>
+        <div class="mt-12 text-gray-400 animate-bounce">
+          <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+          </svg>
+          <p class="text-sm mt-2">Scroll to explore</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="passport-spread mb-16" data-spread="1">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="passport-page bg-[#f5f1e8] border-2 border-gray-300 p-6 md:p-8 rounded-lg shadow-xl min-h-[600px] relative">
+          <div class="absolute top-[15%] left-[10%]">
+            <PassportStamp location="Los Angeles" date="2025-07-15" type="entry" color="red" rotation={12} />
+          </div>
+          <div class="absolute top-[50%] right-[15%]">
+            <PassportStamp location="San Diego" date="2025-08-05" type="special" color="blue" rotation={-8} />
+          </div>
+        </div>
+
+        <div class="passport-page bg-[#f5f1e8] border-2 border-gray-300 p-6 md:p-8 rounded-lg shadow-xl min-h-[600px] relative">
+          <div class="absolute top-[25%] right-[20%]">
+            <PassportStamp location="Portland" date="2025-09-10" type="entry" color="green" rotation={-5} />
+          </div>
+          <div class="absolute top-[60%] left-[12%]">
+            <PassportStamp location="Forks" date="2025-09-15" type="special" color="purple" rotation={10} />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="passport-spread mb-16" data-spread="2">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="passport-page bg-[#f5f1e8] border-2 border-gray-300 p-6 md:p-8 rounded-lg shadow-xl min-h-[600px] relative">
+          <div class="absolute top-[20%] left-[15%]">
+            <PassportStamp location="Seattle" date="2025-10-10" type="entry" color="red" rotation={8} />
+          </div>
+          <div class="absolute top-[55%] right-[10%]">
+            <PassportStamp location="Vancouver" date="2025-10-01" type="special" color="blue" rotation={-12} />
+          </div>
+        </div>
+
+        <div class="passport-page bg-[#f5f1e8] border-2 border-gray-300 p-6 md:p-8 rounded-lg shadow-xl min-h-[600px] relative">
+          <div class="absolute top-[30%] right-[18%]">
+            <PassportStamp location="Bay Area" date="2025-11-05" type="entry" color="green" rotation={-7} />
+          </div>
+          <div class="absolute top-[65%] left-[10%]">
+            <PassportStamp location="Lake Tahoe" date="2025-11-20" type="special" color="purple" rotation={11} />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="passport-spread mb-16" data-spread="3">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="passport-page bg-[#f5f1e8] border-2 border-gray-300 p-6 md:p-8 rounded-lg shadow-xl min-h-[600px] relative">
+          <div class="absolute top-[35%] left-[50%] -translate-x-1/2">
+            <PassportStamp location="Salt Lake City" date="2025-12-01" type="entry" color="red" rotation={7} />
+          </div>
+        </div>
+
+        <!-- Back Page -->
+        <div class="passport-page bg-[#f5f1e8] border-2 border-gray-300 p-6 md:p-8 rounded-lg shadow-xl min-h-[600px] flex flex-col items-center justify-center">
+          <div class="text-center">
+            <div class="text-6xl mb-4">🐾</div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Adventures Continue...</h3>
+            <p class="text-gray-600 mb-8">More destinations await!</p>
+            <a
+              href="/kirk-dog/"
+              class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold rounded-lg shadow-md hover:from-blue-600 hover:to-cyan-600 transition-all duration-200 transform hover:scale-105"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+              </svg>
+              Back to Care Guide
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+
+  <script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+    // Register plugin
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Wait for DOM to be ready
+    document.addEventListener('DOMContentLoaded', () => {
+      // Animate cover
+      gsap.from('#passport-cover', {
+        opacity: 0,
+        y: 50,
+        duration: 1,
+        ease: 'power2.out'
+      });
+
+      // Animate each passport spread
+      const spreads = document.querySelectorAll('.passport-spread');
+
+      spreads.forEach((spread, index) => {
+        // Check if user prefers reduced motion
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (prefersReducedMotion) {
+          // Simple fade-in for reduced motion
+          gsap.from(spread, {
+            scrollTrigger: {
+              trigger: spread,
+              start: 'top 80%',
+              end: 'top 50%',
+              scrub: 1,
+            },
+            y: 30,
+          });
+        } else {
+          // Full 3D flip animation on desktop
+          const isMobile = window.innerWidth < 768;
+
+          if (isMobile) {
+            // Simpler animation for mobile
+            gsap.from(spread, {
+              scrollTrigger: {
+                trigger: spread,
+                start: 'top 80%',
+                end: 'top 30%',
+                scrub: 1,
+              },
+              y: 50,
+              duration: 1,
+            });
+          } else {
+            // Desktop 3D flip
+            gsap.from(spread, {
+              scrollTrigger: {
+                trigger: spread,
+                start: 'top 70%',
+                end: 'top 30%',
+                scrub: 1,
+                // snap: 0.5, // Snap to positions for better UX
+              },
+              rotationY: -90,
+              transformOrigin: 'left center',
+              duration: 1.5,
+              ease: 'power2.inOut',
+            });
+          }
+        }
+
+        // Animate stamps within each spread with stagger
+        const stamps = spread.querySelectorAll('.stamp-container');
+        gsap.from(stamps, {
+          scrollTrigger: {
+            trigger: spread,
+            start: 'top 60%',
+            end: 'top 40%',
+            scrub: 1,
+          },
+          scale: 0,
+          rotation: 180,
+          stagger: 0.1,
+          duration: 0.5,
+          ease: 'back.out(1.7)',
+        });
+      });
+    });
+  </script>
+
+  <style>
+    .passport-page {
+      perspective: 1000px;
+      transform-style: preserve-3d;
+    }
+
+    @media (min-width: 768px) {
+      .passport-spread {
+        perspective: 2000px;
+      }
+    }
+
+    /* Page curl effect */
+    .passport-page::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.05) 50%);
+      border-radius: 0 0 0.5rem 0;
+    }
+  </style>
+</BaseLayout>

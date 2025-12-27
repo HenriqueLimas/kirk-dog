@@ -226,3 +226,221 @@ Create a single-page responsive website for Kirk the English Bulldog that serves
 - **GitHub Actions**: Automated deployment
 - **GitHub Pages**: Free hosting
 - **YouTube**: Video hosting (embeds)
+- **GSAP (Phase 7)**: Scroll-based animations
+
+### Phase 7: Interactive Passport Page
+
+Create an interactive passport page showcasing Kirk's travels to 9 cities with scroll-based horizontal page flip animations.
+
+#### 7.1 Dependencies & Setup
+
+**Install GSAP:**
+```bash
+pnpm add gsap
+```
+
+**Cities to Feature:** LA, San Diego, Portland, Forks, Vancouver, Seattle, Bay Area, Lake Tahoe, Salt Lake City
+
+**Page Organization:** 5 passport spreads (two-page layouts)
+- Spread 1: LA + San Diego
+- Spread 2: Portland + Forks
+- Spread 3: Vancouver + Seattle
+- Spread 4: Bay Area + Lake Tahoe
+- Spread 5: Salt Lake City + Back page
+
+#### 7.2 File Structure
+
+**New Files to Create:**
+1. `/src/pages/passport.astro` - Main passport page route
+2. `/src/components/PassportStamp.astro` - Reusable CSS-based stamp component
+3. `/src/scripts/passport-animations.ts` - GSAP ScrollTrigger animation logic
+
+**Files to Modify:**
+1. `/src/pages/index.astro` - Add "Kirk's Travel Passport" button in About section (around line 40-50, next to Instagram button)
+2. `/package.json` - Add GSAP dependency (via pnpm add command)
+
+#### 7.3 Component Design
+
+**PassportStamp.astro:**
+- Props: `city`, `date`, `type` ('entry'|'departure'|'special'), `color`, `rotation`
+- CSS-based circular stamp with dashed border
+- Tailwind styling: `w-32 h-32 rounded-full border-4 border-dashed`
+- Random rotation (-15° to 15°) for authentic look
+- Color variations: red (entry), blue (departure), purple (special)
+
+**Passport Page Layout:**
+- Cover page with "Kirk's Passport" title and paw print
+- Each spread: left page + right page side-by-side on desktop
+- Stack vertically on mobile (< 768px)
+- 2-3 stamps per city in grid layout
+- Aged paper aesthetic (beige/cream background: `bg-[#f5f1e8]`)
+- Border styling with drop shadows
+
+#### 7.4 GSAP Animation Implementation
+
+**ScrollTrigger Configuration:**
+```typescript
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+spreads.forEach((spread) => {
+  gsap.from(spread, {
+    scrollTrigger: {
+      trigger: spread,
+      start: 'top center',
+      end: 'center center',
+      scrub: 1,
+      snap: 1
+    },
+    rotationY: -180,
+    transformOrigin: 'left center',
+    opacity: 0,
+    duration: 1.5,
+    ease: 'power2.inOut'
+  });
+});
+```
+
+**Animation Sequence:**
+1. Cover page fade-in
+2. Each spread flips horizontally on scroll (3D rotation)
+3. Stamps pop in with stagger effect after page settles
+4. Responsive: Simple fade on mobile, full 3D on desktop
+
+**Performance Optimizations:**
+- Use `will-change: transform` CSS property
+- GPU acceleration with `transform3d`
+- Support `prefers-reduced-motion` media query
+
+#### 7.5 Responsive Design
+
+**Breakpoints:**
+- **Mobile (< 768px):** Stack pages vertically, simple fade transitions
+- **Tablet (768px - 1023px):** Two-column layout, moderate 3D effects
+- **Desktop (> 1024px):** Full horizontal page flip with 3D transforms
+
+**Tailwind Classes:**
+- Container: `max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8`
+- Spreads: `grid grid-cols-1 md:grid-cols-2 gap-8`
+- Pages: `bg-[#f5f1e8] border-2 border-gray-300 p-6 md:p-8 rounded-lg shadow-xl`
+
+#### 7.6 Navigation Button
+
+Add to `/src/pages/index.astro` after the Instagram button (in About section):
+
+```html
+<a
+  href="/kirk-dog/passport"
+  class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold rounded-lg shadow-md hover:from-blue-600 hover:to-cyan-600 transition-all duration-200 transform hover:scale-105 w-full md:w-auto"
+>
+  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+  </svg>
+  Kirk's Travel Passport
+</a>
+```
+
+**Design Notes:**
+- Blue/cyan gradient (distinct from Instagram's purple/pink)
+- Book/document icon from Heroicons
+- Full width on mobile, auto width on desktop
+- Proper base path handling (`/kirk-dog/`)
+
+#### 7.7 Stamp Content Structure
+
+**Example Data for Los Angeles:**
+```typescript
+{
+  city: 'Los Angeles',
+  stamps: [
+    { date: '2024-07-15', location: 'LAX', type: 'entry', color: 'red', rotation: 12 },
+    { date: '2024-07-17', location: 'Santa Monica', type: 'special', color: 'blue', rotation: -8 },
+    { date: '2024-07-18', location: 'Hollywood', type: 'departure', color: 'red', rotation: 5 }
+  ]
+}
+```
+
+**Content Pattern:**
+- Mix of entry/departure/special stamps per city
+- Realistic dates throughout 2024
+- Small descriptive notes (e.g., "Beach day", "Visited pier")
+- 21-27 total stamps across all cities
+
+#### 7.8 Implementation Steps
+
+**Step 1: Setup (30 min)**
+- Install GSAP: `pnpm add gsap`
+- Create component files structure
+
+**Step 2: Build Components (1.5 hours)**
+- Create PassportStamp.astro with CSS-based design
+- Build reusable stamp with Tailwind styling
+- Test stamp variations (colors, rotations, sizes)
+
+**Step 3: Create Main Page (1.5 hours)**
+- Build `/src/pages/passport.astro` using BaseLayout
+- Structure 5 spreads with city content
+- Add cover and back pages
+- Import Footer component
+
+**Step 4: Implement Animations (2 hours)**
+- Create `/src/scripts/passport-animations.ts`
+- Register GSAP ScrollTrigger plugin
+- Implement horizontal flip animation
+- Add stamp pop-in effects with stagger
+- Handle responsive breakpoints
+- Test scroll behavior
+
+**Step 5: Add Navigation (30 min)**
+- Modify `/src/pages/index.astro` About section
+- Add passport button with blue/cyan gradient
+- Test navigation flow between pages
+
+**Step 6: Content & Polish (1 hour)**
+- Add stamp content for all 9 cities
+- Design passport cover with paw print emblem
+- Apply aged paper textures and effects
+- Add drop shadows and page curl effects
+
+**Step 7: Test & Deploy (1 hour)**
+- Test animations on desktop browsers
+- Test responsive behavior (mobile, tablet)
+- Run `pnpm build && pnpm preview` with base path
+- Verify performance (Lighthouse score > 90)
+- Push to GitHub and verify deployment
+
+**Total Estimated Time:** ~7.5 hours
+
+#### 7.9 Technical Considerations
+
+**Astro SSG + GSAP:**
+- Initialize GSAP client-side only: `if (typeof window !== 'undefined')`
+- Use `<script>` tag in passport.astro for GSAP initialization
+- Ensure DOM is ready before ScrollTrigger runs
+
+**GitHub Pages Base Path:**
+- All passport links use `/kirk-dog/` prefix
+- Test with preview before deploying
+- Verify asset paths are correct
+
+**Accessibility:**
+- Add `aria-label` to passport sections
+- Ensure keyboard navigation works
+- Include alt text for stamps
+- Support `prefers-reduced-motion`
+
+**Performance Targets:**
+- Lighthouse Score: > 90
+- First Contentful Paint: < 1.5s
+- Largest Contentful Paint: < 2.5s
+- Use GPU acceleration for smooth animations
+
+#### 7.10 Critical Files Summary
+
+1. `/src/pages/passport.astro` - Main passport page route
+2. `/src/components/PassportStamp.astro` - Reusable stamp component
+3. `/src/scripts/passport-animations.ts` - GSAP animation logic
+4. `/src/pages/index.astro` - Add navigation button (line ~40-50)
+5. `/package.json` - Add GSAP dependency
